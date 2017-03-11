@@ -198,6 +198,7 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_no:
+                // Remove this continent's countries from the list
                 for (Country.CountryItem item: Country.ITEMS) {
                     if (item.getClass().getPackage().getName().equals(mItem.getClass().getPackage().getName())
                             && Country.VISIBLE_ITEMS.contains(item)) {
@@ -206,10 +207,13 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
                         CountryListActivity.mRecyclerViewListener.onRecyclerViewItemRemoved(index);
                     }
                 }
+
+                // Go back to the list activity
                 getActivity().finish();
                 break;
 
             case R.id.btn_yes:
+                // Add the rest of this continent's countries to the list
                 for (Country.CountryItem item: Country.ITEMS) {
                     if (item.getClass().getPackage().getName().equals(mItem.getClass().getPackage().getName())) {
                         if (!Country.VISIBLE_ITEMS.contains(item)) {
@@ -218,10 +222,13 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
                         }
                     }
                 }
+
+                // Go back to the list activity
                 getActivity().finish();
                 break;
 
             case R.id.btn_view_on_wikipedia:
+                // Open page on Wikipedia with browser
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mItem.getUrl())));
                 break;
         }

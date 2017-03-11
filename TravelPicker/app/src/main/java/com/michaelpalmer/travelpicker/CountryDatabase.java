@@ -26,6 +26,11 @@ public class CountryDatabase extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Initialize the database
+     *
+     * @param db Database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableSql = String.format(Locale.US,
@@ -39,12 +44,24 @@ public class CountryDatabase extends SQLiteOpenHelper {
         db.execSQL(createTableSql);
     }
 
+    /**
+     * Upgrade the database when there is a version change
+     *
+     * @param db Database
+     * @param oldVersion Old version number
+     * @param newVersion New version number
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRY);
         onCreate(db);
     }
 
+    /**
+     * Add a country to the database
+     *
+     * @param countryItem CountryItem to add
+     */
     public void addCountry(Country.CountryItem countryItem) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, countryItem.getId());
@@ -56,6 +73,11 @@ public class CountryDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Get all countries from the database
+     *
+     * @return ArrayList of CountryItems
+     */
     public ArrayList<Country.CountryItem> getAll() {
         ArrayList<Country.CountryItem> rows = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -92,6 +114,9 @@ public class CountryDatabase extends SQLiteOpenHelper {
         return rows;
     }
 
+    /**
+     * Clear all data in the database
+     */
     public void truncateData() {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -102,6 +127,12 @@ public class CountryDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Get a country from the database
+     *
+     * @param id Identifier
+     * @return CountryItem or null if it does not exist in the database
+     */
     public Country.CountryItem getCountry(String id) {
         SQLiteDatabase db = getReadableDatabase();
 
@@ -134,6 +165,11 @@ public class CountryDatabase extends SQLiteOpenHelper {
         return countryItem;
     }
 
+    /**
+     * Update existing country in database if it exists, otherwise insert it.
+     *
+     * @param countryItem CountryItem with data to update/create
+     */
     public void insertOrUpdateCountry(Country.CountryItem countryItem) {
         if (getCountry(countryItem.getId()) == null) {
             addCountry(countryItem);
@@ -143,6 +179,11 @@ public class CountryDatabase extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Update a country in the database
+     *
+     * @param countryItem CountryItem with data to update
+     */
     public void updateCountry(Country.CountryItem countryItem) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -156,6 +197,11 @@ public class CountryDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Delete a country from the database
+     *
+     * @param countryItem CountryItem to remove
+     */
     public void deleteCountry(Country.CountryItem countryItem) {
         SQLiteDatabase db = getWritableDatabase();
 
