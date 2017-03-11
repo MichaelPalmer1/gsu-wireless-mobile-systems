@@ -61,8 +61,10 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
         // Use grid layout manager when there are 4 or fewer items, otherwise use linear layout manager
         if (Country.VISIBLE_ITEMS.size() > 4 && layoutManager.equals("GridLayoutManager")) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Country.VISIBLE_ITEMS));
         } else if (Country.VISIBLE_ITEMS.size() <= 4 && layoutManager.equals("LinearLayoutManager")) {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Country.VISIBLE_ITEMS));
         }
     }
 
@@ -144,8 +146,15 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.country_list_content, parent, false);
+            View view;
+            String layoutManager = recyclerView.getLayoutManager().getClass().getSimpleName();
+            if (layoutManager.equals("GridLayoutManager")) {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.country_list_content_grid, parent, false);
+            } else {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.country_list_content, parent, false);
+            }
             return new ViewHolder(view);
         }
 
@@ -163,8 +172,9 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
                         .placeholder(android.R.drawable.picture_frame)
                         .into(holder.mCountryPicture);
 
-                holder.mCountryDetails.setText(holder.mItem.getName());
-                holder.mCountryDetails.setText(holder.mItem.getDetails());
+                if (holder.mCountryDetails != null) {
+                    holder.mCountryDetails.setText(holder.mItem.getDetails());
+                }
             }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

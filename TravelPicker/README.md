@@ -57,3 +57,22 @@ information on Wikipedia.
 - Japan
 - Russia
 - South Korea
+
+## Screenshots
+
+### Listing
+|  Listing  |  Listing Grid  | Listing Grid (Landscape) |
+|-----------|----------------|--------------------------|
+| ![][list] | ![][list_grid] | ![][list_grid_land]      |
+
+[list]: assets/listing.png
+[list_grid]: assets/listing_grid.png
+[list_grid_land]: assets/listing_grid_landscape.png
+
+### Detail
+|   Top    |    Bottom   |
+|----------|-------------|
+| ![][top] | ![][bottom] |
+
+[top]: assets/detail1.png
+[bottom]: assets/detail2.png
