@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TravelPicker</string>
+    <string name="title_country_detail">Country Detail</string>
+    <string name="country">Country</string>
+    <string name="yes">Yes</string>
+    <string name="question_visit">Would you like to visit countries in the same continent?</string>
+    <string name="no">No</string>
+    <string name="notes">Notes</string>
+</resources>
