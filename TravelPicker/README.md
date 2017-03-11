@@ -9,7 +9,7 @@ This app requires internet access to pull the country data from [Wikipedia](http
 ## Data Retrieval
 Country data and images are retrieved via the [Wikipedia API](https://en.wikipedia.org/w/api.php). Images are
 downloaded using the [Picasso](http://square.github.io/picasso/) library. Once downloaded, images are then processed 
-using Google's [Palette](https://developer.android.com/training/material/palette-colors.html) API to determine the best 
+using Google's [Palette](https://developer.android.com/training/material/palette-colors.html) API to determine the 
 scrim colors to use in the app bar layout. In addition, each country detail screen includes a button to view the 
 information on Wikipedia.
 
