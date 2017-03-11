@@ -18,27 +18,37 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
 
+/**
+ * Asynchronous task to perform API calls with
+ *
+ * API Sandbox:
+ * https://en.wikipedia.org/wiki/Special:ApiSandbox#action=query&format=json&prop=extracts|pageimages&titles=United+States&exsentences=3&exintro=1&explaintext=1&piprop=thumbnail&pithumbsize=500
+ *
+ */
 public class API extends AsyncTask<Object, Void, String> {
     private Context context;
     private CountryListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder;
-    private Country.CountryItem values;
+    private Country.CountryItem countryItem;
 
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
+    /**
+     * Perform the API call
+     *
+     * @param data Object array: {Context, ViewHolder}
+     * @return API Response as string
+     */
     @Override
     protected String doInBackground(Object... data) {
         String s, response = "";
         context = (Context) data[0];
         holder = (CountryListActivity.SimpleItemRecyclerViewAdapter.ViewHolder) data[1];
-        values = (Country.CountryItem) data[2];
+        countryItem = holder.mItem;
 
         // TODO: Sending a POST request would be better than this nasty url
         String url = String.format(
                 Locale.US,
-                "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&titles=%s&exsentences=3&exintro=1&explaintext=1",
-                values.getQuery()
+                "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&titles=%s" +
+                        "&exsentences=3&exintro=1&explaintext=1&piprop=thumbnail&pithumbsize=500",
+                countryItem.getQuery()
         );
 
         try {
@@ -63,12 +73,45 @@ public class API extends AsyncTask<Object, Void, String> {
                 response += s;
 
         } catch (Exception e) {
-            Log.e("DownloadJSON_Status", "Error encountered while downloading JSON");
-            e.printStackTrace();
+            Log.e("API", "Error encountered while sending API request: " + e.getMessage());
         }
         return response;
     }
 
+    /**
+     * Process the response
+     *
+     * Sample:
+     *
+     * {
+     *      "batchcomplete": "",
+     *      "query": {
+     *          "pages": {
+     *              "3434750": {
+     *                  "pageid": 3434750,
+     *                  "ns": 0,
+     *                  "title": "United States",
+     *                  "extract": "The United States of America, commonly referred to as the United States (U.S.) or
+     *                              America, is a constitutional federal republic composed of 50 states, a federal
+     *                              district, five major self-governing territories, and various possessions.
+     *                              Forty-eight of the fifty states and the federal district are contiguous and located
+     *                              in North America between Canada and Mexico. The state of Alaska is in the northwest
+     *                              corner of North America, bordered by Canada to the east and across the Bering Strait
+     *                              from Russia to the west.",
+     *                  "thumbnail": {
+     *                      "source": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_Statessvg/50px-Flag_of_the_United_States.svg.png",
+     *                      "width": 50,
+     *                      "height": 26
+     *                  },
+     *                  "pageimage": "Flag_of_the_United_States.svg"
+     *              }
+     *          }
+     *      }
+     *  }
+     *
+     *
+     * @param result String response from the API
+     */
     @Override
     protected void onPostExecute(String result) {
         // Check for cancellations
@@ -87,9 +130,9 @@ public class API extends AsyncTask<Object, Void, String> {
                 String content = page.getString("extract");
                 String image = page.getJSONObject("thumbnail").getString("source");
 
-                values.setName(title);
-                values.setDetails(content);
-                values.setImage(image);
+                countryItem.setName(title);
+                countryItem.setDetails(content);
+                countryItem.setImage(image);
 
                 // Set country name
                 holder.mCountryName.setText(title);
@@ -97,13 +140,12 @@ public class API extends AsyncTask<Object, Void, String> {
 
                 // Get image
                 Picasso.with(context)
-                        .load(image)
+                        .load(countryItem.getImage())
                         .placeholder(android.R.drawable.picture_frame)
                         .into(holder.mCountryPicture);
 
             } catch (JSONException e) {
-                Log.e("CountryListActivity", "JSON Exception: " + e.toString());
-                e.printStackTrace();
+                Log.e("API", "JSON error encountered while processing data: " + e.getMessage());
             }
 
         }

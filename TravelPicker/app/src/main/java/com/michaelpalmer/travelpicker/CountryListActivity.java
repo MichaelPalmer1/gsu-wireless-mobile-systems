@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -44,11 +46,24 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
     @Override
     public void onRecyclerViewItemUpdated() {
         recyclerView.getAdapter().notifyDataSetChanged();
+        updateRecyclerViewLayout();
     }
 
     @Override
     public void onRecyclerViewItemRemoved(int index) {
         recyclerView.getAdapter().notifyItemRemoved(index);
+        updateRecyclerViewLayout();
+    }
+
+    private void updateRecyclerViewLayout() {
+        // use a linear layout manager
+        String layoutManager = recyclerView.getLayoutManager().getClass().getSimpleName();
+
+        if (Country.VISIBLE_ITEMS.size() > 4 && layoutManager.equals("GridLayoutManager")) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else if (Country.VISIBLE_ITEMS.size() <= 4 && layoutManager.equals("LinearLayoutManager")) {
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        }
     }
 
     @Override
@@ -99,6 +114,7 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        updateRecyclerViewLayout();
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Country.VISIBLE_ITEMS));
     }
 
@@ -121,11 +137,11 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mCountryName.setText(mValues.get(position).getName());
+            holder.mCountryName.setText(holder.mItem.getName());
 
             // Download details
-            if (holder.mItem.getDetails().equals("") || holder.mItem.getImage().equals("")) {
-                new API().execute(getBaseContext(), holder, mValues.get(position));
+            if (!holder.mItem.isPopulated()) {
+                new API().execute(getBaseContext(), holder);
             } else {
                 Picasso.with(getBaseContext())
                         .load(holder.mItem.getImage())
@@ -139,6 +155,11 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Restrict going to detail view until data is populated
+                    if (!holder.mItem.isPopulated()) {
+                        return;
+                    }
+
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
@@ -151,7 +172,6 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CountryDetailActivity.class);
                         intent.putExtra(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-
                         context.startActivity(intent);
                     }
                 }

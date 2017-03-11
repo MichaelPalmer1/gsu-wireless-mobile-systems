@@ -90,18 +90,30 @@ public class Country {
         private float rating = 0;
 
         public CountryItem() {
-            // Get package name (continent)
-            String pkg = getClass().getPackage().getName();
+            this(true);
+        }
 
-            // Initialize new continents
-            if (!CONTINENTS.containsKey(pkg)) {
-                CONTINENTS.put(pkg, 0);
+        public CountryItem(boolean generateId) {
+            if (generateId) {
+                // Get package name (continent)
+                String pkg = getClass().getPackage().getName();
+
+                // Initialize new continents
+                if (!CONTINENTS.containsKey(pkg)) {
+                    CONTINENTS.put(pkg, 0);
+                }
+
+                // Create an id
+                int num = CONTINENTS.get(pkg);
+                id = String.format(Locale.US, "%s-%d", pkg, ++num);
+                CONTINENTS.put(pkg, num);
+            } else {
+                id = "dummy";
             }
+        }
 
-            // Create an id
-            int num = CONTINENTS.get(pkg);
-            id = String.format(Locale.US, "%s-%d", pkg, ++num);
-            CONTINENTS.put(pkg, num);
+        public boolean isPopulated() {
+            return !name.equals("") && !details.equals("") && !image.equals("");
         }
 
         public String getId() {
