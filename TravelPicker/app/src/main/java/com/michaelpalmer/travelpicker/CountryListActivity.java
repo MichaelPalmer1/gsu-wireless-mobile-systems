@@ -121,19 +121,19 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mCountryName.setText(mValues.get(position).name);
+            holder.mCountryName.setText(mValues.get(position).getName());
 
             // Download details
-            if (holder.mItem.details.equals("") || holder.mItem.image.equals("")) {
+            if (holder.mItem.getDetails().equals("") || holder.mItem.getImage().equals("")) {
                 new API().execute(getBaseContext(), holder, mValues.get(position));
             } else {
                 Picasso.with(getBaseContext())
-                        .load(holder.mItem.image)
+                        .load(holder.mItem.getImage())
                         .placeholder(android.R.drawable.picture_frame)
                         .into(holder.mCountryPicture);
 
-                holder.mCountryDetails.setText(holder.mItem.name);
-                holder.mCountryDetails.setText(holder.mItem.details);
+                holder.mCountryDetails.setText(holder.mItem.getName());
+                holder.mCountryDetails.setText(holder.mItem.getDetails());
             }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
                         CountryDetailFragment fragment = new CountryDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -150,7 +150,7 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CountryDetailActivity.class);
-                        intent.putExtra(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(CountryDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }
@@ -163,24 +163,19 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mCountryName;
-            public final TextView mCountryDetails;
-            public final ImageView mCountryPicture;
-            public Country.CountryItem mItem;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final View mView;
+            final TextView mCountryName;
+            final TextView mCountryDetails;
+            final ImageView mCountryPicture;
+            Country.CountryItem mItem;
 
-            public ViewHolder(View view) {
+            ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mCountryName = (TextView) view.findViewById(R.id.list_country_name);
                 mCountryDetails = (TextView) view.findViewById(R.id.list_country_details);
                 mCountryPicture = (ImageView) view.findViewById(R.id.list_country_picture);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mCountryDetails.getText() + "'";
             }
         }
     }

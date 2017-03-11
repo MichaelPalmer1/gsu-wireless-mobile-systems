@@ -34,10 +34,11 @@ public class API extends AsyncTask<Object, Void, String> {
         holder = (CountryListActivity.SimpleItemRecyclerViewAdapter.ViewHolder) data[1];
         values = (Country.CountryItem) data[2];
 
+        // TODO: Sending a POST request would be better than this nasty url
         String url = String.format(
                 Locale.US,
                 "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&titles=%s&exsentences=3&exintro=1&explaintext=1",
-                values.query
+                values.getQuery()
         );
 
         try {
@@ -86,8 +87,8 @@ public class API extends AsyncTask<Object, Void, String> {
                 String content = page.getString("extract");
                 String image = page.getJSONObject("thumbnail").getString("source");
 
-                values.setTitle(title);
-                values.setContent(content);
+                values.setName(title);
+                values.setDetails(content);
                 values.setImage(image);
 
                 // Set country name

@@ -62,7 +62,7 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+                appBarLayout.setTitle(mItem.getName());
             }
         }
     }
@@ -73,7 +73,7 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
         View rootView = inflater.inflate(R.layout.country_detail, container, false);
 
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.country_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.country_detail)).setText(mItem.getDetails());
             rating = (RatingBar) rootView.findViewById(R.id.rating);
             notes = (EditText) rootView.findViewById(R.id.notes);
             ImageView imageView = (ImageView) getActivity().findViewById(R.id.detail_country_picture);
@@ -82,12 +82,12 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
             btnYes.setOnClickListener(this);
             btnNo.setOnClickListener(this);
 
-            notes.setText(mItem.notes);
-            rating.setRating(mItem.rating);
+            notes.setText(mItem.getNotes());
+            rating.setRating(mItem.getRating());
 
             // Get image
             Picasso.with(getActivity())
-                    .load(mItem.image)
+                    .load(mItem.getImage())
                     .into(imageView);
         }
 
@@ -96,8 +96,8 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onDestroyView() {
-        mItem.notes = notes.getText().toString();
-        mItem.rating = rating.getRating();
+        mItem.setNotes(notes.getText().toString());
+        mItem.setRating(rating.getRating());
         super.onDestroyView();
     }
 
