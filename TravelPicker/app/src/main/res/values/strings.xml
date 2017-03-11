@@ -6,4 +6,11 @@
     <string name="question_visit">Would you like to visit countries in the same continent?</string>
     <string name="no">No</string>
     <string name="notes">Notes</string>
+    <string name="rate_country">Rate this country</string>
+    <string name="reset_north_america">Reset North America</string>
+    <string name="reset_south_america">Reset South America</string>
+    <string name="reset_europe">Reset Europe</string>
+    <string name="reset_asia">Reset Asia</string>
+    <string name="reset_africa">Reset Africa</string>
+    <string name="view_on_wikipedia">View on Wikipedia</string>
 </resources>

@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_reset" android:title="Reset Items" />
+    <item android:id="@+id/menu_reset_north_america" android:title="@string/reset_north_america" />
+    <item android:id="@+id/menu_reset_south_america" android:title="@string/reset_south_america" />
+    <item android:id="@+id/menu_reset_europe" android:title="@string/reset_europe" />
+    <item android:id="@+id/menu_reset_asia" android:title="@string/reset_asia" />
+    <item android:id="@+id/menu_reset_africa" android:title="@string/reset_africa" />
 </menu>

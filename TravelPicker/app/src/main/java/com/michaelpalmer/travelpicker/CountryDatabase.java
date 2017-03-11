@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.michaelpalmer.travelpicker.countries.Country;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -52,6 +53,52 @@ public class CountryDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_COUNTRY, null, values);
+        db.close();
+    }
+
+    public ArrayList<Country.CountryItem> getAll() {
+        ArrayList<Country.CountryItem> rows = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        // Perform query
+        Cursor cursor = db.query(
+                TABLE_COUNTRY,
+                null, null, null,
+                null, null, null
+        );
+
+        // Check for null
+        if (cursor == null) {
+            return null;
+        }
+
+        // Populate results
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+            float rating = cursor.getFloat(cursor.getColumnIndex(COLUMN_RATING));
+            String notes = cursor.getString(cursor.getColumnIndex(COLUMN_NOTES));
+
+            Country.CountryItem countryItem = new Country.CountryItem(id);
+            countryItem.setNotes(notes);
+            countryItem.setRating(rating);
+
+            rows.add(countryItem);
+        }
+
+        // Close connections
+        cursor.close();
+        db.close();
+
+        return rows;
+    }
+
+    public void truncateData() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Perform query
+        db.delete(TABLE_COUNTRY, null, null);
+
+        // Close connection
         db.close();
     }
 

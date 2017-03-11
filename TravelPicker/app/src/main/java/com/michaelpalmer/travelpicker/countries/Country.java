@@ -68,6 +68,15 @@ public class Country {
         addItem(new South_Korea());
     }
 
+    public static void resetContinent(String pkgName) {
+        for (CountryItem item : ITEMS) {
+            String pkg = item.getClass().getPackage().getName();
+            if (pkg.equals(pkgName) && !VISIBLE_ITEMS.contains(item)) {
+                VISIBLE_ITEMS.add(item);
+            }
+        }
+    }
+
     private static void addItem(CountryItem item) {
         ITEMS.add(item);
         String pkg = item.getClass().getPackage().getName();
@@ -87,6 +96,7 @@ public class Country {
         private String details = "";
         private String notes = "";
         private String image = "";
+        private String url = "";
         private float rating = 0;
 
         public CountryItem() {
@@ -105,11 +115,15 @@ public class Country {
 
                 // Create an id
                 int num = CONTINENTS.get(pkg);
-                id = String.format(Locale.US, "%s-%d", pkg, ++num);
-                CONTINENTS.put(pkg, num);
+                id = String.format(Locale.US, "%s-%s", pkg, query.toLowerCase());
+                CONTINENTS.put(pkg, ++num);
             } else {
-                id = "dummy";
+                id = "dummy-from-db";
             }
+        }
+
+        public CountryItem(String id) {
+            this.id = id;
         }
 
         public boolean isPopulated() {
@@ -144,6 +158,10 @@ public class Country {
             return rating;
         }
 
+        public String getUrl() {
+            return url;
+        }
+
         public void setName(String name) {
             this.name = name;
         }
@@ -164,5 +182,8 @@ public class Country {
             this.rating = rating;
         }
 
+        public void setUrl(String url) {
+            this.url = url;
+        }
     }
 }

@@ -1,8 +1,9 @@
 package com.michaelpalmer.travelpicker;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -89,8 +90,10 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
             countryPicture = (ImageView) getActivity().findViewById(R.id.detail_country_picture);
             Button btnYes = (Button) rootView.findViewById(R.id.btn_yes);
             Button btnNo = (Button) rootView.findViewById(R.id.btn_no);
+            Button btnViewOnWikipedia = (Button) rootView.findViewById(R.id.btn_view_on_wikipedia);
             btnYes.setOnClickListener(this);
             btnNo.setOnClickListener(this);
+            btnViewOnWikipedia.setOnClickListener(this);
 
             Country.CountryItem dbCountry = db.getCountry(mItem.getId());
             if (dbCountry != null) {
@@ -111,11 +114,11 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onDestroyView() {
+    public void onPause() {
+        super.onPause();
         mItem.setNotes(notes.getText().toString());
         mItem.setRating(rating.getRating());
         db.insertOrUpdateCountry(mItem);
-        super.onDestroyView();
     }
 
     @Override
@@ -203,7 +206,9 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
                         CountryListActivity.mRecyclerViewListener.onRecyclerViewItemRemoved(index);
                     }
                 }
+                getActivity().finish();
                 break;
+
             case R.id.btn_yes:
                 for (Country.CountryItem item: Country.ITEMS) {
                     if (item.getClass().getPackage().getName().equals(mItem.getClass().getPackage().getName())) {
@@ -213,6 +218,11 @@ public class CountryDetailFragment extends Fragment implements View.OnClickListe
                         }
                     }
                 }
+                getActivity().finish();
+                break;
+
+            case R.id.btn_view_on_wikipedia:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mItem.getUrl())));
                 break;
         }
     }

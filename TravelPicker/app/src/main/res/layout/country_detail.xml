@@ -11,7 +11,14 @@
         style="?android:attr/textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_margin"
         android:textIsSelectable="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/rate_country" />
 
     <RatingBar
         android:id="@+id/rating"
@@ -21,6 +28,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:labelFor="@+id/notes"
         android:text="@string/notes"/>
 
@@ -33,12 +41,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_gravity="center"
         android:text="@string/question_visit"/>
 
-    <LinearLayout
+    <android.support.v7.widget.ButtonBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center">
 
         <Button
             android:id="@+id/btn_yes"
@@ -52,7 +62,14 @@
             android:layout_height="wrap_content"
             android:text="@string/no"/>
 
-    </LinearLayout>
+    </android.support.v7.widget.ButtonBarLayout>
 
+    <Button
+        android:id="@+id/btn_view_on_wikipedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/text_margin"
+        android:text="@string/view_on_wikipedia"/>
 
 </LinearLayout>

@@ -56,9 +56,9 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
     }
 
     private void updateRecyclerViewLayout() {
-        // use a linear layout manager
         String layoutManager = recyclerView.getLayoutManager().getClass().getSimpleName();
 
+        // Use grid layout manager when there are 4 or fewer items, otherwise use linear layout manager
         if (Country.VISIBLE_ITEMS.size() > 4 && layoutManager.equals("GridLayoutManager")) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else if (Country.VISIBLE_ITEMS.size() <= 4 && layoutManager.equals("LinearLayoutManager")) {
@@ -102,9 +102,24 @@ public class CountryListActivity extends AppCompatActivity implements CountryDet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_reset:
-                Country.VISIBLE_ITEMS.clear();
-                Country.VISIBLE_ITEMS.addAll(Country.ITEMS);
+            case R.id.menu_reset_north_america:
+                Country.resetContinent("com.michaelpalmer.travelpicker.countries.north_america");
+                this.onRecyclerViewItemUpdated();
+                return true;
+            case R.id.menu_reset_south_america:
+                Country.resetContinent("com.michaelpalmer.travelpicker.countries.south_america");
+                this.onRecyclerViewItemUpdated();
+                return true;
+            case R.id.menu_reset_europe:
+                Country.resetContinent("com.michaelpalmer.travelpicker.countries.europe");
+                this.onRecyclerViewItemUpdated();
+                return true;
+            case R.id.menu_reset_africa:
+                Country.resetContinent("com.michaelpalmer.travelpicker.countries.africa");
+                this.onRecyclerViewItemUpdated();
+                return true;
+            case R.id.menu_reset_asia:
+                Country.resetContinent("com.michaelpalmer.travelpicker.countries.asia");
                 this.onRecyclerViewItemUpdated();
                 return true;
             default:
