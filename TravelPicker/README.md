@@ -19,6 +19,7 @@ information on Wikipedia.
 - Data saved to a SQLite database when app is closed
 - Hide countries from continents that are not of interest
 - Re-display all countries from a continent by selecting the corresponding option from the menu
+- Switches to a grid layout when 4 or fewer countries are displayed
 
 ## Supported Countries
 
