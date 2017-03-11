@@ -35,10 +35,10 @@ information on Wikipedia.
 - Brazil
 - Chile
 - Columbia
-- Equador
+- Ecuador
 
 ### Europe
-- Beligum
+- Belgium
 - France
 - Germany
 - Italy
