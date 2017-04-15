@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StarGazer</string>
+    <string name="image">image</string>
+    <string name="like_dislike">Like/Dislike</string>
 </resources>
